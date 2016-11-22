@@ -1,34 +1,25 @@
 class UserTasksController < ApplicationController
+  before_action :all_tasks, only: [:index, :create, :update, :destroy]
   before_action :set_user_task, only: [:show, :edit, :update, :destroy]
-
-  # GET /user_tasks
-  # GET /user_tasks.json
-  def index
-    @user_tasks = UserTask.all
-  end
-
-  # GET /user_tasks/1
-  # GET /user_tasks/1.json
-  def show
-  end
+  ##declared all_tasks below in private. Calling it to run before index, create etc 
+  ##so we don't repeat our code! 
+ 
 
   # GET /user_tasks/new
   def new
     @user_task = UserTask.new
   end
 
-  # GET /user_tasks/1/edit
-  def edit
-  end
-
+ 
   # POST /user_tasks
   # POST /user_tasks.json
   def create
-    @user_task = UserTask.new(user_task_params)
+    @user_task = UserTask.create(user_task_params)
 
     respond_to do |format|
       if @user_task.save
         format.html { redirect_to @user_task, notice: 'User task was successfully created.' }
+        format.js { } #let create method know 
         format.json { render :show, status: :created, location: @user_task }
       else
         format.html { render :new }
@@ -62,6 +53,10 @@ class UserTasksController < ApplicationController
   end
 
   private
+    def all_tasks
+      @user_tasks = UserTask.all
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_user_task
       @user_task = UserTask.find(params[:id])
